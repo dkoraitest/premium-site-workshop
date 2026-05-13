@@ -31,9 +31,9 @@
 
 | # | Этап | Файл |
 |---|------|------|
-| 1 | Бизнес-анализ | [01-business-analysis.md](pipeline/01-business-analysis.md) |
-| 2 | ТЗ на сайт | [02-site-spec.md](pipeline/02-site-spec.md) |
-| 3 | Инфраструктура | [03-infrastructure.md](pipeline/03-infrastructure.md) |
+| 1 | Инфраструктура | [01-infrastructure.md](pipeline/01-infrastructure.md) |
+| 2 | Бизнес-анализ | [02-business-analysis.md](pipeline/02-business-analysis.md) |
+| 3 | ТЗ на сайт | [03-site-spec.md](pipeline/03-site-spec.md) |
 | 4 | Реализация | [04-build.md](pipeline/04-build.md) |
 | 5 | Контент | [05-content.md](pipeline/05-content.md) |
 | 6 | Проверка (QA) | [06-qa-check.md](pipeline/06-qa-check.md) |
