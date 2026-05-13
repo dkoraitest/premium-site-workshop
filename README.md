@@ -61,6 +61,24 @@
 | [before-launch.md](checklists/before-launch.md) | Финальная проверка всего |
 | [deploy-ru.md](checklists/deploy-ru.md) | Деплой из России: что работает, workarounds |
 
+### Мульти-агенты (`.claude/agents/`)
+
+3 агента для проверки качества во время сборки сайта:
+
+| Агент | Что проверяет |
+|-------|--------------|
+| `design-reviewer` | Визуал: типографика, spacing, цвета, premium-ощущение |
+| `code-reviewer` | Код: GSAP usage, performance, accessibility |
+| `responsive-checker` | Responsive: mobile 375px, tablet 768px, desktop 1440px |
+
+### Checkpoints (`checkpoints/`)
+
+| Checkpoint | Когда |
+|-----------|-------|
+| [cp1-hero.md](checkpoints/cp1-hero.md) | Hero на весь экран, CTA видна |
+| [cp2-sections.md](checkpoints/cp2-sections.md) | Все секции, responsive, навигация |
+| [cp3-effects.md](checkpoints/cp3-effects.md) | Эффекты работают, анимации плавные |
+
 ### Справочники
 
 | Файл | Содержание |
@@ -73,47 +91,42 @@
 
 ## Быстрый старт
 
-### Шаг 0: Подготовка (5 мин)
+### 1. Инфраструктура
 
 ```bash
-# Склонировать репо
 git clone https://github.com/dkoraitest/premium-site-workshop.git
 cd premium-site-workshop
-
-# Установить все skills одной командой
-./setup.sh
+./setup.sh          # установит gsap-skills, taste-skill, grill-me
+mkdir my-site && cd my-site
 ```
 
-### Шаг 1: Выбрать тип сайта
+### 2. Бизнес-анализ
 
-Открой `types/` и выбери подходящий для твоего бизнеса. Прочитай README внутри.
+Открой Claude Code и используй промпт из `pipeline/02-business-analysis.md`. Skills: `/brainstorming` → `/grill-me`.
 
-### Шаг 2: Сгенерировать визуал (если нужно)
+### 3. ТЗ на сайт
 
-Для video-hero: используй промпт из `types/video-hero/video-generation.md` в Kling или Runway.
+Промпт из `pipeline/03-site-spec.md`. Прожарь через `/grill-me`.
 
-### Шаг 3: Собрать сайт
+### 4. Реализация
 
-Открой Claude Code в пустой папке и следуй промптам из выбранного типа.
+Выбери тип из `types/` → копируй промпты `01-site.md`, `02-effects.md`. На каждом checkpoint запускай агентов из `.claude/agents/` (design-reviewer, code-reviewer, responsive-checker).
 
-### Шаг 4: Обвязка
+### 5. Контент
 
-Примени модули из `common/` в любом порядке:
-1. `common/seo.md` — SEO-основа
-2. `common/analytics.md` — Метрика + GA4
-3. `common/forms-backend.md` — формы
-4. `common/legal.md` — юридика
-5. `common/production.md` — полировка
+Промпт из `pipeline/05-content.md` — замена placeholder'ов.
 
-### Шаг 5: Деплой
+### 6. QA (отдельная сессия)
 
-Следуй `common/deploy.md`. Рекомендация для РФ: Cloudflare Pages.
+Промпт из `pipeline/06-qa-check.md` — 50+ проверок.
 
-### Шаг 6: Проверка
+### 7. Security + SEO + Legal (отдельная сессия для security!)
 
-Пройди чек-листы:
-1. `checklists/security.md`
-2. `checklists/before-launch.md`
+SEO: `types/{тип}/prompts/03-seo.md`. Security: `checklists/security.md`. Legal: `common/legal.md`.
+
+### 8. Деплой + Аналитика
+
+Формы: `types/{тип}/prompts/04-forms.md`. Деплой: `types/{тип}/prompts/05-deploy.md`. Аналитика: `pipeline/08-deploy-analytics.md`.
 
 ---
 

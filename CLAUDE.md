@@ -6,10 +6,16 @@
 
 ## Как использовать
 
-1. Выбери тип сайта из `types/` под свой бизнес
-2. Следуй промптам из папки выбранного типа
-3. Примени нужные модули из `common/` (SEO, аналитика, формы, деплой)
-4. Проверь по чек-листам из `checklists/` перед запуском
+Проект работает по 8-этапному pipeline (все материалы в `pipeline/`):
+
+1. **Инфраструктура** — clone репо, установка skills (`./setup.sh`)
+2. **Бизнес-анализ** — ЦА, боли, тип сайта (skills: /brainstorming → /grill-me)
+3. **ТЗ на сайт** — структура, контент-план, стек (skill: /grill-me)
+4. **Реализация** — сборка сайта по промптам из `types/{тип}/prompts/` + мульти-агенты
+5. **Контент** — замена placeholder'ов на реальный
+6. **QA** — проверка responsive, формы, кроссбраузерность (отдельная сессия)
+7. **Security + SEO + Legal** — чек-листы, meta, privacy (отдельная сессия для security!)
+8. **Деплой + Аналитика** — Cloudflare Pages, формы → Telegram, Метрика + GA4
 
 ## Рекомендуемые скиллы
 
@@ -49,24 +55,31 @@ npx skills add https://github.com/Leonxlnx/taste-skill
 - **Формы:** serverless function → Telegram бот
 - **SEO:** JSON-LD schema, OG/Twitter cards, sitemap.xml, robots.txt, llms.txt
 
-## Порядок работы (workshop flow)
+## Мульти-агентная система
+
+В `.claude/agents/` лежат 3 агента для проверки качества во время сборки (этап 4):
+
+| Агент | Что делает | Когда |
+|-------|-----------|-------|
+| `design-reviewer` | Скриншот + визуал (типографика, spacing, premium) | После каждого checkpoint |
+| `code-reviewer` | Код (GSAP usage, performance, accessibility) | После CP2, CP3 |
+| `responsive-checker` | Mobile 375px, tablet 768px, desktop 1440px | После CP2, CP3 |
+
+Цикл: написал код → checkpoint → запустил агентов → исправил FAIL → дальше.
+
+Для QA (этап 6) и Security (этап 7) — открывай **отдельные сессии** Claude Code.
+
+## Структура проекта
 
 ```
-1. Выбрать тип сайта → types/{type}/
-2. Сгенерировать видео/визуал (если нужно) → types/{type}/video-generation.md
-3. Собрать сайт → types/{type}/*.md промпты
-4. Обвязка → common/ (в любом порядке)
-   - common/seo.md
-   - common/analytics.md
-   - common/forms-backend.md
-   - common/legal.md
-   - common/production.md
-5. Деплой → common/deploy.md
-6. Проверка → checklists/before-launch.md + checklists/security.md
+pipeline/           — 8-этапный production pipeline (от идеи до launch)
+types/              — 4 типа сайтов с промптами (01-site → 05-deploy)
+.claude/agents/     — мульти-агенты (design, code, responsive)
+common/             — SEO, аналитика, формы, legal, deploy
+checklists/         — security, before-launch, deploy-ru
+checkpoints/        — CP1 (hero), CP2 (секции), CP3 (эффекты)
+resources/          — showcase примеров + полезные ссылки
+setup.sh            — установка всех skills одной командой
+MECHANICS.md        — каталог 10 premium-эффектов
+TOOLS.md            — обзор инструментов и библиотек
 ```
-
-## Полезные ресурсы
-
-- `MECHANICS.md` — каталог 10 premium-эффектов с описанием и промптами
-- `TOOLS.md` — сравнение Claude Design vs Claude Code, обзор скиллов и библиотек
-- `resources/` — ссылки на GitHub-репозитории, awesome-листы, библиотеки компонентов
