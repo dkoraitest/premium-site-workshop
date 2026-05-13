@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Site Workshop — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --surface2: #f0f1f5;
+  --border: #e2e4ea;
+  --text: #1a1a2e;
+  --text2: #6b7085;
+  --accent: #4f46e5;
+  --accent2: #4338ca;
+  --green: #16a34a;
+  --amber: #d97706;
+  --red: #dc2626;
+  --cyan: #0891b2;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.header h1 span { color: var(--accent2); }
+.header-sub {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 2px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  position: sticky;
+  top: 68px;
+  z-index: 99;
+}
+.tab {
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  white-space: nowrap;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.tab:hover { color: var(--text); background: var(--surface2); }
+.tab.active {
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+  border-color: rgba(99,102,241,0.3);
+}
+
+/* Content */
+.content { max-width: 960px; margin: 0 auto; padding: 32px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: var(--accent2);
+}
+
+/* Timeline */
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent2);
+  min-width: 90px;
+  font-variant-numeric: tabular-nums;
+}
+.timeline-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.timeline-body p { font-size: 13px; color: var(--text2); }
+.timeline-cp {
+  display: inline-block;
+  background: rgba(34,197,94,0.15);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+/* Prompt blocks */
+.prompt-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+  position: relative;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: var(--accent2); }
+.copy-btn.copied { background: var(--green); }
+
+/* Sub-tabs (site types) */
+.subtabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.subtab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.subtab:hover { color: var(--text); border-color: var(--text2); }
+.subtab.active { color: var(--cyan); border-color: var(--cyan); background: rgba(6,182,212,0.1); }
+.subpanel { display: none; }
+.subpanel.active { display: block; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+th { text-align: left; padding: 8px 12px; background: var(--surface2); color: var(--text2); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid var(--border); }
+td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+
+/* Checklist */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 13px;
+}
+.check-item input[type="checkbox"] {
+  accent-color: var(--green);
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.check-group { margin: 16px 0; }
+.check-group-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+
+/* Showcase */
+.showcase-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.showcase-card:hover { border-color: var(--accent); }
+.showcase-card h4 { font-size: 15px; font-weight: 600; }
+.showcase-card h4 a { color: var(--accent2); text-decoration: none; }
+.showcase-card h4 a:hover { text-decoration: underline; }
+.showcase-card p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-video { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge-saas { background: rgba(99,102,241,0.15); color: var(--accent2); }
+.badge-agency { background: rgba(245,158,11,0.15); color: var(--amber); }
+.badge-product { background: rgba(6,182,212,0.15); color: var(--cyan); }
+
+/* Section titles */
+.section-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+}
+
+/* Step indicator */
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* Info box */
+.info-box {
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  font-size: 13px;
+}
+.info-box.warn {
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.2);
+}
+.info-box.success {
+  background: rgba(34,197,94,0.08);
+  border-color: rgba(34,197,94,0.2);
+}
+
+/* Code */
+code {
+  background: var(--surface2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+pre {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  margin: 12px 0;
+  line-height: 1.6;
+}
+
+/* Link list */
+.link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.link-item:last-child { border-bottom: none; }
+.link-item a { color: var(--accent2); text-decoration: none; }
+.link-item a:hover { text-decoration: underline; }
+.link-item span { color: var(--text2); }
+
+/* Participant section */
+.participant-box {
+  background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(8,145,178,0.06));
+  border: 1px solid rgba(79,70,229,0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Premium Site Workshop <span>Dashboard</span></h1>
+  <div class="header-sub">14 мая 2026 &middot; 2 часа &middot; AI Surfers</div>
+</div>
+
+<div class="tabs" id="mainTabs">
+  <div class="tab active" data-tab="program">Программа</div>
+  <div class="tab" data-tab="pipeline">Pipeline</div>
+  <div class="tab" data-tab="showcase">Showcase</div>
+  <div class="tab" data-tab="tools">Инструменты</div>
+  <div class="tab" data-tab="checklists">Чек-листы</div>
+</div>
+
+<div class="content">
+
+<!-- ==================== ПРОГРАММА ==================== -->
+<div class="tab-content active" id="program">
+  <h2 class="section-title">Production Pipeline: 8 этапов</h2>
+
+  <div class="info-box">
+    <strong>Формат:</strong> Воркшоп проходит все 8 этапов. Ключевые (3, 4, 7, 8) — глубоко, остальные — обзорно. Ведущий строит параллельно с участниками. Все материалы — в репо.
+  </div>
+
+  <div class="card">
+    <div class="timeline-item">
+      <div class="timeline-time">00:00-00:10</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">1</span>Инфраструктура</h4>
+        <p><strong>Глубоко:</strong> Clone репо, установка skills (gsap-skills, taste-skill, grill-me), выбор типа, создание папки.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/01-infrastructure.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">00:10-00:15</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">2</span>Бизнес-анализ</h4>
+        <p>Обзорно: кто ЦА, какую боль решаем, выбор типа сайта. Skills уже установлены.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/02-business-analysis.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">00:15-00:25</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">3</span>ТЗ на сайт</h4>
+        <p>Обзорно: структура, секции, контент-план, стек. Claude генерирует SITE_SPEC.md.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/03-site-spec.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">00:25-01:25</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">4</span>Реализация</h4>
+        <p><strong>Глубоко (60 мин):</strong> Hero + секции (prompts/01-site.md) → premium-эффекты (prompts/02-effects.md). Checkpoints по ходу.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/04-build.md</code> + <code>types/{тип}/prompts/01-site.md, 02-effects.md</code></p>
+        <div class="timeline-cp">CP1 (00:40) — Hero готов</div>
+        <div class="timeline-cp">CP2 (01:00) — Все секции</div>
+        <div class="timeline-cp">CP3 (01:25) — Эффекты работают</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">01:25-01:30</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">5</span>Контент</h4>
+        <p>Обзорно: замена placeholder'ов на реальный контент. AI-генерация текстов и изображений.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/05-content.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">01:30-01:35</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">6</span>Проверка</h4>
+        <p>Обзорно: формы, responsive, кроссбраузерность. QA-агент в отдельной сессии.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/06-qa-check.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">01:35-01:45</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">7</span>Security + SEO + Legal</h4>
+        <p><strong>Глубоко:</strong> SEO-промпт (03-seo.md). Security чек-лист. Privacy policy. Отдельная сессия для security!</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/07-security-seo.md</code> + <code>checklists/security.md</code></p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">01:45-01:55</div>
+      <div class="timeline-body">
+        <h4><span class="step-num">8</span>Деплой + Аналитика</h4>
+        <p><strong>Глубоко:</strong> Деплой на Cloudflare Pages. Формы → Telegram. Яндекс.Метрика + GA4. Before-launch чек-лист.</p>
+        <p style="font-size:12px;color:var(--text2);margin-top:4px;">Материал: <code>pipeline/08-deploy-analytics.md</code> (деплой + формы + аналитика всё в одном)</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">01:55-02:00</div>
+      <div class="timeline-body">
+        <h4>Финал</h4>
+        <p>2-3 волонтёра показывают результат. Ссылка на репо. Q&A.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Заметки ведущего</h2>
+    <ul style="font-size:13px; color:var(--text2); padding-left:20px; line-height:2;">
+      <li><strong>Этапы 1-2 и 5-6</strong> — обзорные, показываем подход и материалы. Участники делают глубже дома.</li>
+      <li><strong>Этапы 3-4 и 7-8</strong> — основное время. Здесь участники строят руками.</li>
+      <li><strong>Кто-то отстаёт</strong> — дай конкретный промпт, не объясняй. «Скопируй вот это».</li>
+      <li><strong>Claude зависает</strong> — подожди 30 сек, потом новая сессия с тем же промптом.</li>
+      <li><strong>Эффекты не работают</strong> — проверь консоль. 90% проблем — GSAP/ScrollTrigger/Lenis не подключён.</li>
+      <li><strong>Время гибкое</strong> — быстро идёт? Углубляемся в контент. Медленно? Пропускаем QA.</li>
+      <li><strong>Pipeline-доски</strong> — в папке <code>active/boards/</code> по доске на каждый этап.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== PIPELINE ==================== -->
+<div class="tab-content" id="pipeline">
+  <h2 class="section-title">Pipeline: все этапы с промптами</h2>
+
+  <!-- Этап 1 -->
+  <div class="card">
+    <h2><span class="step-num">1</span>Инфраструктура</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Файл: <code>pipeline/01-infrastructure.md</code></p>
+    <div class="prompt-block" id="p01">Склонируй репозиторий с материалами воркшопа: https://github.com/dkoraitest/premium-site-workshop.git
+
+Установи skills для качественной работы:
+1. greensock/gsap-skills — правильный GSAP, ScrollTrigger, performance
+2. taste-skill от Leonxlnx — premium UI quality
+3. grill-me от mattpocock — stress-test планов и решений
+
+Создай папку для моего проекта, инициализируй git, добавь .env* в .gitignore.<button class="copy-btn" onclick="copyPrompt('p01')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 2 -->
+  <div class="card">
+    <h2><span class="step-num">2</span>Бизнес-анализ</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Skills: brainstorming → grill-me | Файл: <code>pipeline/02-business-analysis.md</code></p>
+    <div class="prompt-block" id="p02">Используй skill /brainstorming для генерации идей, затем /grill-me для прожарки результата.
+
+Проведи бизнес-анализ для создания премиум-сайта. Результат оформи как BUSINESS_ANALYSIS.md.
+
+Бизнес: [НАЗВАНИЕ], сфера: [СФЕРА], продукт: [ЧТО ПРОДАЁТЕ], ценовой сегмент: [ПРЕМИУМ/СРЕДНИЙ].
+
+Определи:
+1. Целевую аудиторию (кто, какие боли, где ищет решение)
+2. Ценностное предложение (через какую боль транслируем)
+3. Анализ 2-3 конкурентов (что у них хорошо/плохо)
+4. Рекомендацию типа сайта: video-hero / saas-aurora / agency-kinetic / product-scroll
+5. Бренд-атрибуты: цвета, настроение, тон коммуникации<button class="copy-btn" onclick="copyPrompt('p02')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 3 -->
+  <div class="card">
+    <h2><span class="step-num">3</span>ТЗ на сайт</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Skill: grill-me (прожарка ТЗ) | Файл: <code>pipeline/03-site-spec.md</code></p>
+    <div class="prompt-block" id="p03">На основе бизнес-анализа из BUSINESS_ANALYSIS.md сгенерируй полное ТЗ на сайт — SITE_SPEC.md:
+
+1. Структура: какие страницы, какие секции на каждой
+2. Контент-план: что нужно для каждой секции (текст, фото, видео)
+3. Функциональные требования (формы, кабинеты, интеграции)
+4. Выбор стека с обоснованием
+5. Дизайн-направление: 2-3 сайта-референса, mood, палитра
+6. SEO-стратегия: ключевые запросы, структура URL
+
+После генерации используй skill /grill-me чтобы прожарить структуру ТЗ и найти пробелы.<button class="copy-btn" onclick="copyPrompt('p03')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 4: Реализация с типами -->
+  <div class="card">
+    <h2><span class="step-num">4</span>Реализация</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:4px;">Основной этап. Выбери тип — промпты разные, flow одинаковый. Файл: <code>pipeline/04-build.md</code></p>
+    <div class="info-box" style="font-size:12px;margin-bottom:12px;">
+      <strong>Мульти-агентный подход:</strong> после каждого checkpoint запускай агентов из <code>.claude/agents/</code>:<br>
+      <strong>design-reviewer</strong> — визуал и premium-качество |
+      <strong>code-reviewer</strong> — код, GSAP, performance |
+      <strong>responsive-checker</strong> — mobile/tablet/desktop
+    </div>
+
+    <div class="subtabs" id="typeTabs">
+      <div class="subtab active" data-type="video-hero"><span class="badge badge-video">Video Hero</span></div>
+      <div class="subtab" data-type="saas-aurora"><span class="badge badge-saas">SaaS Aurora</span></div>
+      <div class="subtab" data-type="agency-kinetic"><span class="badge badge-agency">Agency Kinetic</span></div>
+      <div class="subtab" data-type="product-scroll"><span class="badge badge-product">Product Scroll</span></div>
+    </div>
+
+    <div class="subpanel active" id="type-video-hero">
+      <h3>Шаг 01: Создание сайта</h3>
+      <div class="prompt-block" id="vh01">Используй taste-skill для premium качества UI и gsap-skills для анимаций.
+
+Создай лендинг для [БИЗНЕС/БРЕНД]. Стиль: кинематографичный, luxury. Hero: full-screen видео (файл hero.mp4 если есть, иначе тёмный gradient) с overlay-текстом (заголовок + подзаголовок + CTA). Секции: About, Features/Services (3-4 карточки), Portfolio/Cases (grid), Contact/CTA, Footer. Шрифт: Inter или аналогичный. Палитра: тёмная с белым текстом и одним акцентным цветом. Mobile-first responsive. Smooth scroll через Lenis.<button class="copy-btn" onclick="copyPrompt('vh01')">Скопировать</button></div>
+      <h3>Шаг 02: Premium-эффекты</h3>
+      <div class="prompt-block" id="vh02">Используй gsap-skills для правильных анимаций и orchestrating-gsap-lenis для совместимости ScrollTrigger + Lenis.
+
+Добавь premium-эффекты:
+1. Scroll-scrub видео: при скролле видео проигрывается вперёд/назад (GSAP ScrollTrigger). Загрузи видео как blob через XHR. Smooth seeking: targetTime + requestAnimationFrame + lerp (0.06).
+2. Film grain overlay: полноэкранный div с CSS noise-текстурой, opacity 0.03-0.05, pointer-events: none.
+3. Fade-in анимации: все секции с translateY(30px) + opacity через IntersectionObserver.
+4. Hero текст fade-out: opacity 1→0, translateY вверх через ScrollTrigger.<button class="copy-btn" onclick="copyPrompt('vh02')">Скопировать</button></div>
+    </div>
+    <div class="subpanel" id="type-saas-aurora">
+      <h3>Шаг 01: Создание сайта</h3>
+      <div class="prompt-block" id="sa01">Используй taste-skill для premium качества UI и gsap-skills для анимаций.
+
+Создай лендинг для [SaaS-ПРОДУКТ]. Стиль: Linear/Vercel — тёмный фон, animated mesh gradient в hero (aurora-эффект из 3-4 radial-gradient, анимация background-position 25s цикл). Поверх — glassmorphism карточки (backdrop-filter blur 20px, rgba background, subtle border). Секция features — bento grid 3 колонки. Scroll-driven появление через CSS animation-timeline: view(). Шрифт: Inter. Палитра: тёмная с одним акцентным цветом.<button class="copy-btn" onclick="copyPrompt('sa01')">Скопировать</button></div>
+      <h3>Шаг 02: Premium-эффекты</h3>
+      <div class="prompt-block" id="sa02">Используй gsap-skills для правильных анимаций и orchestrating-gsap-lenis для совместимости ScrollTrigger + Lenis.
+
+Добавь premium-эффекты:
+1. Staggered появление bento-карточек через GSAP ScrollTrigger (stagger: 0.1, ease: "power2.out").
+2. Hover на карточках: scale(1.02), translateY(-4px), glow-тень. Transition 0.3s.
+3. Marquee-полоса между hero и features. CSS animation: translateX(0) → translateX(-50%) infinite linear 20s.
+4. Smooth scroll через Lenis.<button class="copy-btn" onclick="copyPrompt('sa02')">Скопировать</button></div>
+    </div>
+    <div class="subpanel" id="type-agency-kinetic">
+      <h3>Шаг 01: Создание сайта</h3>
+      <div class="prompt-block" id="ak01">Используй taste-skill для premium качества UI и gsap-skills для анимаций.
+
+Создай лендинг для креативного агентства [НАЗВАНИЕ]. Стиль: Awwwards-level editorial. Крупная типографика (80-120px hero headline), serif + sans-serif микс. Минимум цветов (чёрный + белый + один акцент). Hero: полноэкранный с анимированным заголовком — каждое слово из-под маски (overflow:hidden + translateY). Marquee-полосы между секциями. Секция кейсов — hover с видео-превью.<button class="copy-btn" onclick="copyPrompt('ak01')">Скопировать</button></div>
+      <h3>Шаг 02: Premium-эффекты</h3>
+      <div class="prompt-block" id="ak02">Используй gsap-skills для правильных анимаций и orchestrating-gsap-lenis для совместимости ScrollTrigger + Lenis.
+
+Добавь premium-эффекты:
+1. Кастомный курсор: dot (8px) + circle-follower (40px) с GSAP quickTo. На hover: follower увеличивается, blend-mode exclusion. Magnetic для CTA (сдвиг 15px). На touch — скрыть.
+2. Две marquee-полосы: filled + stroke, противоположные направления. Привязать к scroll velocity через Lenis. 48-72px, uppercase.
+3. Staggered text reveal: SplitType → GSAP translateY(100%) из overflow:hidden, stagger 0.05s, power4.out.<button class="copy-btn" onclick="copyPrompt('ak02')">Скопировать</button></div>
+    </div>
+    <div class="subpanel" id="type-product-scroll">
+      <h3>Шаг 01: Создание сайта</h3>
+      <div class="prompt-block" id="ps01">Используй taste-skill для premium качества UI и gsap-skills для анимаций.
+
+Создай лендинг для [ПРОДУКТ/БРЕНД]. Стиль: Apple-like. Hero: полноэкранное фото с parallax (фон медленнее текста). Горизонтальная pinned-секция: при вертикальном скролле секция прибивается, 4-5 карточек прокручиваются горизонтально (GSAP ScrollTrigger pin:true). Галерея: clip-path: circle() reveal при скролле. На мобильных — вертикальный layout. Smooth scroll через Lenis.<button class="copy-btn" onclick="copyPrompt('ps01')">Скопировать</button></div>
+      <h3>Шаг 02: Premium-эффекты</h3>
+      <div class="prompt-block" id="ps02">Используй gsap-skills для правильных анимаций и orchestrating-gsap-lenis для совместимости ScrollTrigger + Lenis.
+
+Добавь premium-эффекты:
+1. Multi-layer parallax: фон 0.3x, средний 0.6x, передний 1x. GSAP ScrollTrigger.
+2. Clip-path reveal: circle(0%) → circle(100%) через ScrollTrigger. Второе изображение: inset() слева направо. 0.8-1.2s, power2.inOut.
+3. Smooth scroll через Lenis.
+4. Fade-in секций: translateY(30px) + opacity через IntersectionObserver.<button class="copy-btn" onclick="copyPrompt('ps02')">Скопировать</button></div>
+    </div>
+  </div>
+
+  <!-- Этап 5 -->
+  <div class="card">
+    <h2><span class="step-num">5</span>Контент</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Файл: <code>pipeline/05-content.md</code></p>
+    <div class="prompt-block" id="p05">Используй установленные skills (taste-skill для качества UI, gsap-skills для анимаций).
+
+Замени все placeholder-тексты на реальный контент:
+1. Сгенерируй тексты на основе бизнес-анализа из BUSINESS_ANALYSIS.md: заголовки, описания секций, CTA-кнопки. Тон — [ПРОФЕССИОНАЛЬНЫЙ / ДРУЖЕЛЮБНЫЙ / LUXURY].
+2. Hero-заголовок: транслируй главную ценность через боль ЦА.
+3. Секция features: по 1-2 предложения на каждую фичу, конкретные выгоды.
+4. CTA: конкретное действие, не «Узнать больше», а «Получить демо» / «Рассчитать стоимость».
+5. Оптимизируй изображения: конвертируй в WebP (q80), добавь loading="lazy" для below-fold.<button class="copy-btn" onclick="copyPrompt('p05')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 6 -->
+  <div class="card">
+    <h2><span class="step-num">6</span>Проверка (QA)</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Файл: <code>pipeline/06-qa-check.md</code> | Запускай в отдельной сессии!</p>
+    <div class="prompt-block" id="p06">Запусти в ОТДЕЛЬНОЙ сессии Claude Code (QA-агент).
+
+Проведи QA-проверку сайта. Проверь каждый пункт, отчитайся PASS/FAIL/WARN:
+
+1. Responsive: 375px (iPhone SE), 768px (iPad), 1440px (Desktop)
+2. Нет горизонтального скролла на мобильных
+3. Все ссылки работают (нет 404)
+4. Все изображения загружаются
+5. Формы: отправка работает, валидация, success/error сообщения
+6. Анимации плавные (нет jank), 60fps
+7. Навигация работает (якорные ссылки)
+8. Кроссбраузерность: Chrome, Safari, Firefox
+9. Нет Lorem ipsum или placeholder-текстов
+10. Footer с актуальными контактами<button class="copy-btn" onclick="copyPrompt('p06')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 7 -->
+  <div class="card">
+    <h2><span class="step-num">7</span>Security + SEO + Legal</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Файл: <code>pipeline/07-security-seo.md</code> | Security — ОТДЕЛЬНАЯ сессия!</p>
+    <h3>SEO</h3>
+    <div class="prompt-block" id="p07seo">Добавь SEO-обвязку:
+1. Meta: title (до 60 символов), description (до 160), canonical URL
+2. Open Graph: og:title, og:description, og:image (1200x630, абсолютный URL), og:url, og:type, og:locale ru_RU
+3. Twitter Card: summary_large_image
+4. JSON-LD: Organization + WebSite + WebPage (связь через @id)
+5. sitemap.xml, robots.txt (разреши GPTBot, ClaudeBot, PerplexityBot), llms.txt<button class="copy-btn" onclick="copyPrompt('p07seo')">Скопировать</button></div>
+    <h3>Security (новая сессия!)</h3>
+    <div class="prompt-block" id="p07sec">Запусти в ОТДЕЛЬНОЙ сессии Claude Code (Security-агент). Агент, который писал код, предвзят к своим ошибкам.
+
+Проведи security-аудит по чек-листу checklists/security.md. Проверь каждый пункт, отчитайся PASS/FAIL:
+- .env в .gitignore, нет hardcoded ключей
+- XSS: все данные из форм экранируются
+- Кнопка disable при отправке, серверная валидация
+- HTTPS, HTTP→HTTPS redirect
+- Внешние скрипты с конкретными версиями (не latest)<button class="copy-btn" onclick="copyPrompt('p07sec')">Скопировать</button></div>
+    <h3>Legal</h3>
+    <div class="prompt-block" id="p07legal">Добавь Privacy Policy (ФЗ-152 для РФ) и Cookie Consent баннер. Баннер фиксирован внизу, кнопка принятия + ссылка на policy, запоминает выбор в localStorage. Не загружай аналитику до принятия.<button class="copy-btn" onclick="copyPrompt('p07legal')">Скопировать</button></div>
+  </div>
+
+  <!-- Этап 8 -->
+  <div class="card">
+    <h2><span class="step-num">8</span>Деплой + Аналитика</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Файл: <code>pipeline/08-deploy-analytics.md</code></p>
+    <h3>Формы → Telegram</h3>
+    <div class="info-box warn" style="font-size:12px;">
+      <strong>Подготовка:</strong> @BotFather → /newbot → токен. Добавь бота в группу. Получи chat_id: <code>api.telegram.org/bot{TOKEN}/getUpdates</code>. Создай <code>.env</code>.
+    </div>
+    <div class="prompt-block" id="p08forms">Добавь форму обратной связи с отправкой в Telegram:
+1. HTML-форма: имя, телефон, email (обязательные), комментарий (опционально).
+2. Serverless function api/submit.js: валидация, escape HTML, POST в Telegram Bot API.
+3. Клиентский JS: fetch POST, disabled кнопка, success/error сообщения.
+4. Токены из process.env (TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID).<button class="copy-btn" onclick="copyPrompt('p08forms')">Скопировать</button></div>
+    <h3>Деплой</h3>
+    <div class="prompt-block" id="p08deploy">Подготовь проект к деплою на Cloudflare Pages:
+1. Все пути относительные, .env в .gitignore
+2. Serverless → functions/api/submit.js (формат Cloudflare Workers)
+3. git init, git add, git commit
+4. gh repo create my-site --public --push<button class="copy-btn" onclick="copyPrompt('p08deploy')">Скопировать</button></div>
+    <div class="info-box success" style="font-size:12px;">
+      dash.cloudflare.com → Pages → Create → Connect GitHub → Deploy. Добавь env vars в Settings.
+    </div>
+    <h3>Яндекс.Метрика</h3>
+    <div class="prompt-block" id="p08metrika">Добавь счётчик Яндекс.Метрики. ID: [METRIKA_ID]. Код перед &lt;/head&gt;. Включи: webvisor: true, clickmap: true, accurateTrackBounce: true. Добавь noscript-пиксель в body. Настрой цели: ym(ID, 'reachGoal', 'cta_click') на CTA, ym(ID, 'reachGoal', 'form_submit') на форму.<button class="copy-btn" onclick="copyPrompt('p08metrika')">Скопировать</button></div>
+    <h3>Google Analytics 4</h3>
+    <div class="prompt-block" id="p08ga4">Добавь GA4 через gtag.js. ID: [GA4_ID]. Код в head. Настрой события: gtag('event', 'cta_click', {section: 'hero'}), gtag('event', 'generate_lead', {form_name: 'contact'}). Скролл 50%/90% — через enhanced measurement.<button class="copy-btn" onclick="copyPrompt('p08ga4')">Скопировать</button></div>
+  </div>
+</div>
+
+<!-- ==================== SHOWCASE ==================== -->
+<div class="tab-content" id="showcase">
+  <h2 class="section-title">Showcase: живые примеры</h2>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Откройте в браузере и покажите участникам: «Вот к чему стремимся».</p>
+
+  <h3 style="margin-bottom:12px;"><span class="badge badge-video">Video Hero</span> Кинематографичный scroll-scrub</h3>
+  <div class="showcase-card">
+    <h4><a href="https://www.apple.com/iphone/" target="_blank">Apple — iPhone</a></h4>
+    <p>Эталонный scroll-scrub с image sequence. Каждый пиксель скролла = кадр.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: tech-продукты, электроника, гаджеты</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://hotelsanders.com/" target="_blank">Hotel Sanders</a></h4>
+    <p>Luxury-отель Копенгаген. Fullscreen hero-видео, transparent-to-solid header при скролле.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: бутик-отели, luxury hospitality, рестораны</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://ranchosantana.com/" target="_blank">Rancho Santana</a></h4>
+    <p>Luxury resort, Никарагуа. Кинематографичное дрон-видео в hero, lazy-loaded видео.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: luxury-недвижимость, курорты, travel</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://www.bang-olufsen.com/en/us/soundbars/beosound-premiere" target="_blank">Bang &amp; Olufsen — Beosound Premiere</a></h4>
+    <p>SCROLL TO DISCOVER — продукт поворачивается, раскрывает материалы и технологии.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: premium-электроника, аудио, luxury-техника</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;"><span class="badge badge-saas">SaaS Aurora</span> Gradient + Glass + Bento</h3>
+  <div class="showcase-card">
+    <h4><a href="https://linear.app" target="_blank">Linear</a></h4>
+    <p>Glassmorphism навигация, bento-grid с micro-interactions, aurora-подсветка за карточками.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: SaaS, project management, developer tools</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://vercel.com" target="_blank">Vercel</a></h4>
+    <p>Mesh-gradient hero, glass-карточки, bento-раскладка фич.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: cloud hosting, CI/CD, developer platforms</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://stripe.com" target="_blank">Stripe</a></h4>
+    <p>Animated gradient mesh hero, glassmorphism на pricing-карточках.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: fintech, платежи, financial infrastructure</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://raycast.com" target="_blank">Raycast</a></h4>
+    <p>Aurora-свечение за UI, bento-сетка с интерактивными мини-демо.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: productivity apps, launcher, desktop tools</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://midday.ai" target="_blank">Midday</a></h4>
+    <p>Open-source SaaS с aurora-эстетикой. Как сделать красиво без бюджета Stripe.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: стартап, open-source SaaS, бухгалтерия</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;"><span class="badge badge-agency">Agency Kinetic</span> Text reveal + Cursor + Marquee</h3>
+  <div class="showcase-card">
+    <h4><a href="https://obys.agency" target="_blank">Obys Agency</a></h4>
+    <p>Oversized типографика, stretch/squash при скролле. Кастомный курсор, kinetic poster.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: креативное агентство, дизайн-студия</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://375.studio/en" target="_blank">Studio 375</a></h4>
+    <p>Итальянское агентство, Awwwards SOTD. Marquee «DISCOVER», italic-анимации, hover-эффекты в галерее проектов.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: mid-size агентство, брендинг-студия</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://locomotive.ca" target="_blank">Locomotive</a></h4>
+    <p>Авторы Locomotive Scroll. Крупная типографика, inertia-scroll, текст по словам.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: digital-агентство, веб-студия</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://dennissnellenberg.com" target="_blank">Dennis Snellenberg</a></h4>
+    <p>Freelance портфолио с kinetic type. Awwwards Site of the Day.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: freelance-портфолио, персональный бренд</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://monopo.co.jp" target="_blank">Monopo</a></h4>
+    <p>Токийское агентство. Marquee, staggered grid, микс японского минимализма и western kinetic.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: международное агентство, fashion, lifestyle</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;"><span class="badge badge-product">Product Scroll</span> Horizontal pin + Parallax + Reveal</h3>
+  <div class="showcase-card">
+    <h4><a href="https://www.apple.com/macbook-pro/" target="_blank">Apple — MacBook Pro</a></h4>
+    <p>Горизонтальный pinned-скролл, parallax-слои, clip-path reveal экрана. Эталон.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: tech-продукты, ноутбуки, компьютеры</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://www.dji.com" target="_blank">DJI</a></h4>
+    <p>Scroll-driven видео полёта, горизонтальные pinned-секции, parallax облака и ландшафт.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: дроны, камеры, outdoor-техника</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://www.porsche.com" target="_blank">Porsche</a></h4>
+    <p>Горизонтальный скролл с панорамой авто. Scroll-driven reveal характеристик.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: автомобили, premium-транспорт</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://www.tesla.com" target="_blank">Tesla</a></h4>
+    <p>Full-viewport секции с parallax-переходами. Scroll-pinned блоки характеристик.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: электромобили, энергетика, tech-hardware</p>
+  </div>
+  <div class="showcase-card">
+    <h4><a href="https://www.etq-amsterdam.com" target="_blank">ETQ Amsterdam</a></h4>
+    <p>Luxury e-commerce. Горизонтальный скролл коллекций, parallax product photography. Awwwards SOTD.</p>
+    <p style="font-size:11px;color:var(--accent);">Бизнес: luxury e-commerce, обувь, одежда, аксессуары</p>
+  </div>
+</div>
+
+
+<!-- ==================== ИНСТРУМЕНТЫ ==================== -->
+<div class="tab-content" id="tools">
+  <h2 class="section-title">Инструменты</h2>
+
+  <div class="card">
+    <h2>Skills: планирование и анализ</h2>
+    <table>
+      <tr><th>Скилл</th><th>Установка</th><th>Зачем</th></tr>
+      <tr><td><strong>grill-me</strong> (Matt Pocock)</td><td><code>npx skills add mattpocock/skills --skill "grill-me"</code></td><td>Stress-test плана: допрос по каждой ветке, находит пробелы</td></tr>
+    </table>
+    <div class="info-box" style="font-size:12px;margin-top:8px;">
+      <strong>Flow:</strong> brainstorming (генерация идей) → grill-me (прожарка плана) → реализация
+    </div>
+  </div>
+
+  <div class="card" style="border-color: var(--accent);">
+    <h2 style="color:var(--green);">Skills: анимации и стек (приоритет!)</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Эти скиллы напрямую помогают с GSAP + Lenis — основным стеком воркшопа.</p>
+    <table>
+      <tr><th>Скилл</th><th>Установка</th><th>Зачем</th></tr>
+      <tr><td><strong>gsap-skills</strong> (официальный)</td><td><code>npx skills add greensock/gsap-skills</code></td><td>Правильный GSAP, ScrollTrigger, performance</td></tr>
+      <tr><td><strong>orchestrating-gsap-lenis</strong></td><td><a href="https://skills.rest/skill/orchestrating-gsap-lenis" target="_blank" style="color:var(--accent2)">skills.rest</a></td><td>Решает конфликт ScrollTrigger + Lenis</td></tr>
+      <tr><td>claudedesignskills (27 плагинов)</td><td><code>npx skills add freshtechbro/claudedesignskills</code></td><td>GSAP, Locomotive, Barba, PixiJS, Lottie</td></tr>
+      <tr><td>css-animation-skill</td><td><code>npx skills add neonwatty/css-animation-skill</code></td><td>Чистые CSS-анимации</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>MCP-серверы</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Claude видит результат в браузере и измеряет performance.</p>
+    <table>
+      <tr><th>Сервер</th><th>Установка</th><th>Зачем</th></tr>
+      <tr><td><strong>Chrome DevTools</strong></td><td><code>claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest</code></td><td>Скриншоты, DOM, Lighthouse</td></tr>
+      <tr><td>Lighthouse MCP</td><td><code>npx @anthropic-ai/claude-code mcp add lighthouse -- npx lighthouse-mcp</code></td><td>Performance, a11y, SEO</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Skills: качество UI</h2>
+    <table>
+      <tr><th>Скилл</th><th>Установка</th></tr>
+      <tr><td>taste-skill (рекомендуется)</td><td><code>npx skills add https://github.com/Leonxlnx/taste-skill</code></td></tr>
+      <tr><td>Luxury UI</td><td><code>npx skills add https://github.com/Leonxlnx/taste-skill --skill "high-end-visual-design"</code></td></tr>
+      <tr><td>Минимализм</td><td><code>npx skills add https://github.com/Leonxlnx/taste-skill --skill "minimalist-ui"</code></td></tr>
+      <tr><td>Брутализм</td><td><code>npx skills add https://github.com/Leonxlnx/taste-skill --skill "industrial-brutalist-ui"</code></td></tr>
+      <tr><td>ui-ux-pro-max</td><td><code>npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill</code></td></tr>
+      <tr><td>claude-frontend-skills</td><td><a href="https://github.com/Koomook/claude-frontend-skills" target="_blank" style="color:var(--accent2)">GitHub</a></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>DESIGN.md коллекции (drop-in дизайн-системы)</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Скопируй DESIGN.md в проект — Claude подхватит токены: цвета, типографику, spacing.</p>
+    <div class="link-item"><a href="https://github.com/VoltAgent/awesome-design-md" target="_blank">awesome-design-md (VoltAgent)</a> <span>55+ DESIGN.md (Stripe, Linear, BMW)</span></div>
+    <div class="link-item"><a href="https://github.com/bergside/awesome-design-skills" target="_blank">awesome-design-skills (bergside)</a> <span>67 DESIGN.md + SKILL.md</span></div>
+    <div class="link-item"><a href="https://github.com/wilwaldon/Claude-Code-Frontend-Design-Toolkit" target="_blank">Frontend Design Toolkit</a> <span>240+ стилей, 127 шрифтовых пар, 99 UX guidelines</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Библиотеки (CDN)</h2>
+    <table>
+      <tr><th>Библиотека</th><th>CDN</th><th>Зачем</th></tr>
+      <tr><td>GSAP</td><td><code>cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js</code></td><td>Анимации</td></tr>
+      <tr><td>ScrollTrigger</td><td><code>cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js</code></td><td>Scroll-driven</td></tr>
+      <tr><td>SplitText</td><td><code>cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js</code></td><td>Text reveal</td></tr>
+      <tr><td>Lenis</td><td><code>cdn.jsdelivr.net/npm/lenis@latest/dist/lenis.min.js</code></td><td>Smooth scroll</td></tr>
+      <tr><td>SplitType</td><td><code>cdn.jsdelivr.net/npm/split-type@latest</code></td><td>Text split (open-source)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Компоненты (copy-paste)</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:8px;">Внешние библиотеки — установи отдельно или скопируй нужный компонент в проект.</p>
+    <div class="link-item"><a href="https://github.com/DavidHDev/react-bits" target="_blank">react-bits</a> <span>110+ анимированных компонентов (React)</span></div>
+    <div class="link-item"><a href="https://magicui.design/" target="_blank">Magic UI</a> <span>Marquee, retro grids, neon gradients (React + Tailwind)</span></div>
+    <div class="link-item"><a href="https://ui.aceternity.com/" target="_blank">Aceternity UI</a> <span>200+ эффектов: 3D cards, beams, particles</span></div>
+    <div class="link-item"><a href="https://github.com/ibelick/motion-primitives" target="_blank">motion-primitives</a> <span>UI kit для animated interfaces</span></div>
+    <div class="link-item"><a href="https://github.com/codse/animata" target="_blank">animata</a> <span>Hand-crafted анимации (React + Tailwind)</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Awesome-листы &amp; Референсы</h2>
+    <div class="link-item"><a href="https://www.awwwards.com" target="_blank">Awwwards</a> <span>Лучшие сайты мира</span></div>
+    <div class="link-item"><a href="https://bentogrids.com" target="_blank">bentogrids.com</a> <span>Галерея bento grid дизайнов</span></div>
+    <div class="link-item"><a href="https://scroll-driven-animations.style" target="_blank">scroll-driven-animations.style</a> <span>Демо CSS scroll animations</span></div>
+    <div class="link-item"><a href="https://github.com/sergey-pimenov/awesome-web-animation" target="_blank">awesome-web-animation</a> <span>10 категорий эффектов</span></div>
+    <div class="link-item"><a href="https://github.com/filipecalegario/awesome-vibe-coding" target="_blank">awesome-vibe-coding</a> <span>Всё про vibe coding</span></div>
+    <div class="link-item"><a href="https://github.com/VoltAgent/awesome-design-md" target="_blank">awesome-design-md</a> <span>Готовые DESIGN.md (BMW, Stripe, MongoDB)</span></div>
+  </div>
+</div>
+
+<!-- ==================== ЧЕК-ЛИСТЫ ==================== -->
+<div class="tab-content" id="checklists">
+  <h2 class="section-title">Чек-листы</h2>
+
+  <div class="subtabs" id="checklistTabs">
+    <div class="subtab active" data-cl="security">Security</div>
+    <div class="subtab" data-cl="launch">Before Launch</div>
+    <div class="subtab" data-cl="deploy">Deploy из РФ</div>
+  </div>
+
+  <div class="subpanel active" id="cl-security">
+    <div class="card">
+      <h2>Чек-лист безопасности</h2>
+
+      <div class="check-group">
+        <div class="check-group-title">ENV и секреты</div>
+        <div class="check-item"><input type="checkbox"><span>.env в .gitignore</span></div>
+        <div class="check-item"><input type="checkbox"><span>Нет hardcoded API ключей/токенов в коде</span></div>
+        <div class="check-item"><input type="checkbox"><span>Env-переменные на хостинге через dashboard</span></div>
+        <div class="check-item"><input type="checkbox"><span>Нет console.log с чувствительными данными</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">XSS и инъекции</div>
+        <div class="check-item"><input type="checkbox"><span>Данные из формы экранируются (&lt; &gt; &amp;)</span></div>
+        <div class="check-item"><input type="checkbox"><span>Нет innerHTML с пользовательским вводом</span></div>
+        <div class="check-item"><input type="checkbox"><span>Serverless валидирует входные данные</span></div>
+        <div class="check-item"><input type="checkbox"><span>Content-Type проверяется</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">Формы</div>
+        <div class="check-item"><input type="checkbox"><span>Кнопка disable при отправке</span></div>
+        <div class="check-item"><input type="checkbox"><span>Серверная валидация</span></div>
+        <div class="check-item"><input type="checkbox"><span>Ошибки не раскрывают stack traces</span></div>
+        <div class="check-item"><input type="checkbox"><span>Rate limiting (хотя бы клиентский)</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">HTTPS и заголовки</div>
+        <div class="check-item"><input type="checkbox"><span>HTTPS работает</span></div>
+        <div class="check-item"><input type="checkbox"><span>HTTP &rarr; HTTPS redirect</span></div>
+        <div class="check-item"><input type="checkbox"><span>X-Content-Type-Options: nosniff</span></div>
+        <div class="check-item"><input type="checkbox"><span>X-Frame-Options: DENY</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">Зависимости и медиа</div>
+        <div class="check-item"><input type="checkbox"><span>Внешние скрипты с конкретными версиями</span></div>
+        <div class="check-item"><input type="checkbox"><span>npm audit — нет critical</span></div>
+        <div class="check-item"><input type="checkbox"><span>Видео/фото без геолокации/EXIF</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subpanel" id="cl-launch">
+    <div class="card">
+      <h2>Чек-лист перед запуском</h2>
+
+      <div class="check-group">
+        <div class="check-group-title">Контент</div>
+        <div class="check-item"><input type="checkbox"><span>Нет lorem ipsum</span></div>
+        <div class="check-item"><input type="checkbox"><span>Все ссылки работают</span></div>
+        <div class="check-item"><input type="checkbox"><span>Телефоны и email кликабельны (tel:, mailto:)</span></div>
+        <div class="check-item"><input type="checkbox"><span>Изображения загружаются</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">Технические</div>
+        <div class="check-item"><input type="checkbox"><span>Mobile: iPhone SE + Android</span></div>
+        <div class="check-item"><input type="checkbox"><span>Desktop: Chrome + Safari + Firefox</span></div>
+        <div class="check-item"><input type="checkbox"><span>Нет горизонтального скролла</span></div>
+        <div class="check-item"><input type="checkbox"><span>Favicon в табе</span></div>
+        <div class="check-item"><input type="checkbox"><span>Title и description уникальны</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">SEO</div>
+        <div class="check-item"><input type="checkbox"><span>JSON-LD schema валидна</span></div>
+        <div class="check-item"><input type="checkbox"><span>og:image 1200x630 существует</span></div>
+        <div class="check-item"><input type="checkbox"><span>sitemap.xml доступен</span></div>
+        <div class="check-item"><input type="checkbox"><span>robots.txt доступен</span></div>
+        <div class="check-item"><input type="checkbox"><span>canonical URL корректен</span></div>
+        <div class="check-item"><input type="checkbox"><span>llms.txt добавлен</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">Формы</div>
+        <div class="check-item"><input type="checkbox"><span>Форма отправляется &rarr; Telegram</span></div>
+        <div class="check-item"><input type="checkbox"><span>Валидация работает (пустая форма)</span></div>
+        <div class="check-item"><input type="checkbox"><span>Success/error сообщения</span></div>
+        <div class="check-item"><input type="checkbox"><span>Кнопка блокируется</span></div>
+      </div>
+
+      <div class="check-group">
+        <div class="check-group-title">Performance</div>
+        <div class="check-item"><input type="checkbox"><span>Hero-видео &lt; 5 сек на 4G</span></div>
+        <div class="check-item"><input type="checkbox"><span>Lazy loading для below-fold</span></div>
+        <div class="check-item"><input type="checkbox"><span>WebP изображения</span></div>
+        <div class="check-item"><input type="checkbox"><span>Нет неиспользуемых скриптов</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subpanel" id="cl-deploy">
+    <div class="card">
+      <h2>Деплой из России</h2>
+
+      <h3>Хостинги</h3>
+      <table>
+        <tr><th>Платформа</th><th>Управление</th><th>Сайт для посетителей</th><th>Рекомендация</th></tr>
+        <tr><td>Cloudflare Pages</td><td style="color:var(--green)">Работает</td><td style="color:var(--green)">CDN в РФ</td><td><strong>Лучший выбор</strong></td></tr>
+        <tr><td>Netlify</td><td style="color:var(--green)">Работает</td><td style="color:var(--green)">Работает</td><td>100GB free</td></tr>
+        <tr><td>GitHub Pages</td><td style="color:var(--green)">Работает</td><td style="color:var(--green)">Работает</td><td>Только статика</td></tr>
+        <tr><td>Vercel</td><td style="color:var(--red)">VPN</td><td style="color:var(--red)">Нестабильно</td><td>Рискованно</td></tr>
+      </table>
+
+      <h3>Инструменты</h3>
+      <table>
+        <tr><th>Инструмент</th><th>Из РФ</th></tr>
+        <tr><td>GitHub</td><td style="color:var(--green)">Работает</td></tr>
+        <tr><td>Claude Code</td><td style="color:var(--green)">Работает</td></tr>
+        <tr><td>Cursor</td><td style="color:var(--green)">Работает</td></tr>
+        <tr><td>npm / CDN</td><td style="color:var(--green)">Работают</td></tr>
+        <tr><td>Kling (видео)</td><td style="color:var(--green)">Работает</td></tr>
+        <tr><td>Runway / Pika / Sora</td><td style="color:var(--red)">VPN</td></tr>
+      </table>
+
+      <div class="info-box" style="margin-top:16px;">
+        <strong>Двойной деплой (рекомендуется):</strong> Cloudflare Pages (основной, CDN в РФ) + Netlify (резервный). Оба с автодеплоем от одного GitHub-репо.
+      </div>
+
+      <h3>Альтернатива VPN: GeoHide DNS</h3>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:8px;">Если нужен доступ к заблокированным сервисам (Runway, Pika, ChatGPT) без VPN:</p>
+      <div class="link-item"><a href="https://dns.geohide.ru:8443/" target="_blank">GeoHide DNS</a> <span>Бесплатный DNS, проксирует только заблокированные домены</span></div>
+      <div class="link-item"><a href="https://habr.com/ru/articles/984224/" target="_blank">Инструкция на Хабре</a> <span>Персональный DNS через NextDNS + GitHub Actions (надёжнее)</span></div>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /content -->
+
+<script>
+// Main tabs
+document.querySelectorAll('#mainTabs .tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#mainTabs .tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+
+// Type sub-tabs
+document.querySelectorAll('#typeTabs .subtab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#typeTabs .subtab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#types .subpanel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('type-' + tab.dataset.type).classList.add('active');
+  });
+});
+
+// Checklist sub-tabs
+document.querySelectorAll('#checklistTabs .subtab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#checklistTabs .subtab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#checklists .subpanel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('cl-' + tab.dataset.cl).classList.add('active');
+  });
+});
+
+// Remove handlers for deleted tabs (checkpoints, participants) — they no longer exist in DOM
+
+// Copy prompt
+function copyPrompt(id) {
+  const el = document.getElementById(id);
+  const text = el.textContent.replace('Скопировать', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = el.querySelector('.copy-btn');
+    btn.textContent = 'Готово';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Скопировать';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+</script>
+
+</body>
+</html>
