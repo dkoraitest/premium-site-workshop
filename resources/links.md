@@ -13,6 +13,14 @@
 | **claudedesignskills** (27 плагинов) | `npx skills add freshtechbro/claudedesignskills` | GSAP-ScrollTrigger, Locomotive, Barba, PixiJS, Lottie и др. |
 | **css-animation-skill** | `npx skills add neonwatty/css-animation-skill` | Чистые CSS-анимации без библиотек |
 
+## Skills: планирование и анализ
+
+| Скилл | Установка | Для чего |
+|-------|-----------|----------|
+| **grill-me** (Matt Pocock) | `npx skills add mattpocock/skills --skill "grill-me"` | Stress-test плана: допрашивает по каждой ветке решений, находит пробелы |
+
+Рекомендуемый flow: brainstorming (генерация идей) → grill-me (прожарка плана) → реализация.
+
 ## Skills: качество UI и дизайн
 
 | Скилл | Установка | Для чего |

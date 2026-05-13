@@ -31,6 +31,9 @@ npx skills add https://github.com/Leonxlnx/taste-skill
 - `--skill "minimalist-ui"` — Notion/Linear стиль
 - `--skill "industrial-brutalist-ui"` — жёсткий, экспериментальный
 
+### Планирование
+- `npx skills add mattpocock/skills --skill "grill-me"` — stress-test плана (допрос по каждой ветке решений)
+
 ### Дополнительные
 - `npx skills add freshtechbro/claudedesignskills` — 27 плагинов для визуальных эффектов
 - `npx skills add nextlevelbuilder/ui-ux-pro-max-skill` — auto-дизайн-система
@@ -40,7 +43,7 @@ npx skills add https://github.com/Leonxlnx/taste-skill
 ## Конвенции
 
 - **Язык:** русский для клиентского контента
-- **Стек:** vanilla HTML/CSS/JS + GSAP + Lenis. Без фреймворков — максимальная простота для воркшопа
+- **Стек:** на выбор участника. GSAP + Lenis для анимаций. Vanilla HTML/CSS/JS, React, Next.js, Tailwind — что удобнее
 - **Видео:** генерация через Kling или аналоги → сжатие через ffmpeg → blob-loading на сайте
 - **Деплой:** Netlify (основной), Cloudflare Pages (РФ-friendly), Vercel (если доступен)
 - **Формы:** serverless function → Telegram бот

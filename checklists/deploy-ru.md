@@ -31,6 +31,21 @@
 | **Pika** | VPN | Среднее | Быстрый |
 | **Sora (OpenAI)** | VPN | Высокое | Ограниченный доступ |
 
+## Альтернатива VPN: GeoHide DNS
+
+Если нужен доступ к заблокированным сервисам (Runway, Pika, Sora, ChatGPT) без полноценного VPN:
+
+### GeoHide DNS (бесплатный)
+Некоммерческий DNS-сервис. Проксирует только заблокированные домены, остальной трафик идёт напрямую.
+- Сайт: https://dns.geohide.ru:8443/
+- Поддержка: DNS-over-HTTPS/TLS/QUIC, hosts-файлы для Windows/macOS/Linux/Android
+- Разблокирует: ChatGPT, Notion, Canva, Runway и др.
+
+### Персональный DNS-профиль (надёжнее)
+Создай свой DNS через NextDNS + GitHub Actions — проксируются только нужные домены.
+- Инструкция: https://habr.com/ru/articles/984224/
+- Репозиторий: github.com/noVibe/DnsConf
+
 ## Workarounds
 
 ### Если Vercel недоступен

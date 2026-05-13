@@ -5,7 +5,7 @@
 
 ## Промпт для Claude Code
 
-> Создай лендинг для [БИЗНЕС/БРЕНД]. Стиль: кинематографичный, luxury. Hero: full-screen видео (файл hero.mp4 если есть, иначе тёмный gradient) с overlay-текстом (заголовок + подзаголовок + CTA). Секции: About, Features/Services (3-4 карточки), Portfolio/Cases (grid), Contact/CTA, Footer. Стек: vanilla HTML/CSS/JS. Шрифт: Inter или аналогичный. Палитра: тёмная с белым текстом и одним акцентным цветом. Mobile-first responsive. Smooth scroll через Lenis.
+> Создай лендинг для [БИЗНЕС/БРЕНД]. Стиль: кинематографичный, luxury. Hero: full-screen видео (файл hero.mp4 если есть, иначе тёмный gradient) с overlay-текстом (заголовок + подзаголовок + CTA). Секции: About, Features/Services (3-4 карточки), Portfolio/Cases (grid), Contact/CTA, Footer. Шрифт: Inter или аналогичный. Палитра: тёмная с белым текстом и одним акцентным цветом. Mobile-first responsive. Smooth scroll через Lenis.
 
 ## Что заменить
 - `[БИЗНЕС/БРЕНД]` — название вашего бизнеса или бренда
