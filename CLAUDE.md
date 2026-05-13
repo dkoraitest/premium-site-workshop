@@ -11,19 +11,31 @@
 3. Примени нужные модули из `common/` (SEO, аналитика, формы, деплой)
 4. Проверь по чек-листам из `checklists/` перед запуском
 
-## Подключение taste-skill
+## Рекомендуемые скиллы
 
-Перед началом работы установи taste-skill для premium-качества UI:
+### Приоритет (стек воркшопа)
 
 ```bash
+# Официальный GSAP skill — правильный ScrollTrigger, timelines, performance
+npx skills add greensock/gsap-skills
+
+# taste-skill — anti-slop, premium UI
 npx skills add https://github.com/Leonxlnx/taste-skill
 ```
 
-Или конкретный вариант:
+Скилл orchestrating-gsap-lenis (решает конфликт ScrollTrigger + Lenis): [skills.rest](https://skills.rest/skill/orchestrating-gsap-lenis)
+
+### taste-skill варианты
 - `--skill "design-taste-frontend"` — универсальный (рекомендуется)
 - `--skill "high-end-visual-design"` — мягкий, дорогой UI
 - `--skill "minimalist-ui"` — Notion/Linear стиль
 - `--skill "industrial-brutalist-ui"` — жёсткий, экспериментальный
+
+### Дополнительные
+- `npx skills add freshtechbro/claudedesignskills` — 27 плагинов для визуальных эффектов
+- `npx skills add nextlevelbuilder/ui-ux-pro-max-skill` — auto-дизайн-система
+
+Полный список: `resources/links.md`
 
 ## Конвенции
 

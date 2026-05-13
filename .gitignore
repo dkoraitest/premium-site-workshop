@@ -1,1 +1,5 @@
 .env*
+node_modules/
+active/
+docs/superpowers/
+.DS_Store
