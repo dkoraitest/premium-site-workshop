@@ -25,6 +25,21 @@
 | [**agency-kinetic**](types/agency-kinetic/) | Text reveal, custom cursor, marquee | Агентства, портфолио |
 | [**product-scroll**](types/product-scroll/) | Horizontal pin, parallax, clip-path | Продукты, e-commerce |
 
+### Production Pipeline (`pipeline/`)
+
+8-этапный процесс от идеи до launch:
+
+| # | Этап | Файл |
+|---|------|------|
+| 1 | Бизнес-анализ | [01-business-analysis.md](pipeline/01-business-analysis.md) |
+| 2 | ТЗ на сайт | [02-site-spec.md](pipeline/02-site-spec.md) |
+| 3 | Инфраструктура | [03-infrastructure.md](pipeline/03-infrastructure.md) |
+| 4 | Реализация | [04-build.md](pipeline/04-build.md) |
+| 5 | Контент | [05-content.md](pipeline/05-content.md) |
+| 6 | Проверка (QA) | [06-qa-check.md](pipeline/06-qa-check.md) |
+| 7 | Security + SEO + Legal | [07-security-seo.md](pipeline/07-security-seo.md) |
+| 8 | Деплой + Аналитика | [08-deploy-analytics.md](pipeline/08-deploy-analytics.md) |
+
 ### Обвязка (`common/`)
 
 Модули, применимые к любому типу сайта:
@@ -65,8 +80,8 @@
 git clone https://github.com/dkoraitest/premium-site-workshop.git
 cd premium-site-workshop
 
-# Установить taste-skill
-npx skills add https://github.com/Leonxlnx/taste-skill
+# Установить все skills одной командой
+./setup.sh
 ```
 
 ### Шаг 1: Выбрать тип сайта
